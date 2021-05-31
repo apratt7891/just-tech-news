@@ -1,5 +1,7 @@
-const fs = require('fs');
-const profileDataArgs = process.argv.slice(2, process.argv.length);
+// required for fs and inquirer//
+const fs = require('fs'); 
+const inquirer = require('inquirer');
+
 const [name, github] = profileDataArgs;
 const generateHTML = (name, github) => {
     return `
