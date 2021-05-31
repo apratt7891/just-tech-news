@@ -26,11 +26,48 @@ const trackerOptions = () => {
                 ]
         }
     ])
-    .then(answers) => {
-        
+    .then(answer) => {
+
     }
 }
 
+const departmentName = () => {
+    return inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'department',
+            message: "What department would you like to add?",
+        }) 
+    .then(answer) => {
+
+const addRole = () => {
+    return inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'role',
+            message: "What Role would you like to add?",
+        }) 
+    .then(answer) => {
+
+
+const addEmployee = () => {
+    return inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'role',
+            message: "What Employee would you like to add?",
+        }) 
+    .then(answer) => {        
+
+
+const updateEmployeeRole = () => {
+    return inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'role',
+            message: "Select and employee: ",
+        }) 
+    .then(answer) => { 
 
 fs.writeFile('index.html', generateHTML(name, github), err => {
     if (err) throw err;
