@@ -1,5 +1,6 @@
 // required for inquirer//
 const inquirer = require('inquirer');
+const { createConnection } = require('mysql');
 
 
 // team array//
@@ -28,6 +29,17 @@ const trackerOptions = () => {
     }
 }
 
+function viewAll () {
+    let options = 'SELECT 
+
+    c
+    if (err) return err;
+
+    console.table(results);
+
+
+}) 
+}
 const departmentName = () => {
     return inquirer.prompt ([
         {
