@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ctable": "^0.0.3",
     "inquirer": "^8.1.0"
   }
 }

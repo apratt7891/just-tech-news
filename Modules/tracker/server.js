@@ -1,10 +1,19 @@
 // required for inquirer//
 const inquirer = require('inquirer');
 
+const mysql = require("mysql");
+const cTable = require('console.table');
 
+// Connect to database
+const db = mysql.createConnection({
+    host: 'localhost',
+    // Your MySQL username,
+    user: 'root',
+    // Your MySQL password
+    password: 'Alexpaige2017#',
+    database: 'employee'
+});
 
-// team array//
-const teamArray = [];
 
 //options prompt//
 const trackerOptions = () => {
@@ -20,8 +29,10 @@ const trackerOptions = () => {
                 'Add a Department',
                 'Add a Role',
                 'Add an Employee',
-                'Update an Employee Role'
-                ]
+                'Update an Employee Role']
+        }
+    ])
+
 
 
 
@@ -59,59 +70,14 @@ const trackerOptions = () => {
         })   
 }
 
-const viewAllDept = () => {
-    let deptQuery = 'SELECT * FROM department';
-    connection.query(deptQuery, (err, results) => {
-        if(err) throw err;
+function viewAllDept () {
+    db.query('SELECT * FROM department', function (err, results) {
+        console.log(results);
     
-        return inquirer.prompt([
-            [
-                name: 
-            ]
-        ])
+
 
 
 
 
 }) 
 }
-const departmentName = () => {
-    return inquirer.prompt ([
-        {
-            type: 'input',
-            name: 'department',
-            message: "What department would you like to add?",
-        }) 
-    .then(answer) => {
-
-const addRole = () => {
-    return inquirer.prompt ([
-        {
-            type: 'input',
-            name: 'role',
-            message: "What Role would you like to add?",
-        }) 
-    .then(answer) => {
-
-
-const addEmployee = () => {
-    return inquirer.prompt ([
-        {
-            type: 'input',
-            name: 'role',
-            message: "What Employee would you like to add?",
-        }) 
-    .then(answer) => {        
-
-
-const updateEmployeeRole = () => {
-    return inquirer.prompt ([
-        {
-            type: 'input',
-            name: 'role',
-            message: "Select and employee: ",
-        }) 
-    .then(answer) => { 
-
-
-
