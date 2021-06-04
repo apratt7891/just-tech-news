@@ -1,6 +1,6 @@
 // required for inquirer//
 const inquirer = require('inquirer');
-const { createConnection } = require('mysql');
+
 
 
 // team array//
@@ -11,7 +11,7 @@ const trackerOptions = () => {
     return inquirer.prompt ([
         {
             type: 'list',
-            name: 'option',
+            name: 'trackerOption',
             message: "What would you like to do?",
             choices: [
                 'View All Departments',
@@ -20,22 +20,57 @@ const trackerOptions = () => {
                 'Add a Department',
                 'Add a Role',
                 'Add an Employee',
-                'Update an Employee Role',
+                'Update an Employee Role'
                 ]
-        }
-    ])
-    .then(answer) => {
 
-    }
+
+
+    .then((answer) => {
+        switch (answer.trackerOptions) {
+            case "View all Departments":
+                viewAllDept();
+                break;
+
+    
+            case "View all Employees":
+                viewAllEmployee();
+                break;
+
+            case "View all Roles":
+                viewAllRoles();
+                break; 
+                   
+            case "Add a Department":
+                addDept();
+                break;
+               
+            case "Add a Role":
+                addRole();
+                break;
+
+            case "Add an Employees":
+                addEmployee();
+                break;
+
+            case "Update an Employee Role":
+                updateEmployeeRole();
+                break;    
+            }
+        })   
 }
 
-function viewAll () {
-    let options = 'SELECT 
+const viewAllDept = () => {
+    let deptQuery = 'SELECT * FROM department';
+    connection.query(deptQuery, (err, results) => {
+        if(err) throw err;
+    
+        return inquirer.prompt([
+            [
+                name: 
+            ]
+        ])
 
-    c
-    if (err) return err;
 
-    console.table(results);
 
 
 }) 
