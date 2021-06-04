@@ -2,7 +2,7 @@
 const inquirer = require('inquirer');
 
 const mysql = require("mysql");
-const cTable = require('console.table');
+const consoleTable = require('console.table');
 
 // Connect to database
 const db = mysql.createConnection({
@@ -11,16 +11,17 @@ const db = mysql.createConnection({
     user: 'root',
     // Your MySQL password
     password: 'Alexpaige2017#',
-    database: 'employee'
+    database: 'employee_tracker'
 });
 
 
 //options prompt//
-const trackerOptions = () => {
-    return inquirer.prompt ([
+const promptChoices = () => {
+    return inquirer.prompt (
+
         {
             type: 'list',
-            name: 'trackerOption',
+            name: 'choice',
             message: "What would you like to do?",
             choices: [
                 'View All Departments',
@@ -30,54 +31,73 @@ const trackerOptions = () => {
                 'Add a Role',
                 'Add an Employee',
                 'Update an Employee Role']
-        }
-    ])
+        },
+    )
 
 
 
 
-    .then((answer) => {
-        switch (answer.trackerOptions) {
+    .then(function({choice}) {
+        switch (choice) {
             case "View all Departments":
-                viewAllDept();
+                viewAllDept()
                 break;
 
     
             case "View all Employees":
-                viewAllEmployee();
+                viewAllEmployees()
                 break;
 
             case "View all Roles":
-                viewAllRoles();
+                viewAllRoles()
                 break; 
                    
             case "Add a Department":
-                addDept();
+                addDept()
                 break;
                
             case "Add a Role":
-                addRole();
+                addRole()
                 break;
 
             case "Add an Employees":
-                addEmployee();
+                addEmployee()
                 break;
 
             case "Update an Employee Role":
-                updateEmployeeRole();
+                updateEmployeeRole()
                 break;    
             }
         })   
+        .catch();
 }
 
-function viewAllDept () {
-    db.query('SELECT * FROM department', function (err, results) {
-        console.log(results);
-    
 
+function viewAllDept() {
+        
+        var query = 'SELECT * FROM department'
+        
+        db.query(query, function (err, res) {
+            if (err) throw err;
 
-
-
+        console.table(res);
+        console.log('department viewed');    
+        
 
 }) 
-}
+};
+
+function viewAllEmployees() {
+
+    var query = 'SELECT * FROM employee'
+
+    db.query(query, function (err, res) {
+        if (err) throw err;
+
+    console.table(res);
+    console.log('department viewed'); 
+
+})
+};
+
+promptChoices();
