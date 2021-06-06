@@ -142,47 +142,86 @@ function addDepartment() {
 };
 
 
-const addRole = () => {
-    const addRoleQuery = `SELECT * FROM role; SELECT * FROM department`
-    db.query(addRoleQuery, (err, results) => {
-        if (err) throw err;
+function addRole() { 
+    db.query("SELECT role.title AS title, role.salary AS salary FROM role",   function(err, res) {
+      inquirer.prompt([
+          {
+            type: 'input',
+            name: 'title',
+            message: "What is the title of the new role?"
+          },
+          {
+            type: 'input',
+            name: 'salary',
+            message: "What is the salary of the new role?"
+          } 
+      ]).then(function(res) {
+          db.query(
+              "INSERT INTO role SET ?",
+              {
+                title: res.title,
+                salary: res.salary,
+                department_id: 1,
+              },
+              function(err) {
+                  if (err) throw err
+                  console.table(res);
+                  firstPrompt();
+              }
+          )
+  
+      });
+    });
+    }   
 
-        console.log('');
-        console.table(chalk.yellow('List of current Roles:'), results[0]);
-
+    
+function addEmployee() {
+    
         inquirer.prompt([
             {
-                name: 'newTitle',
                 type: 'input',
-                message: 'Enter the new Title:'
+                name: 'firstname',
+                message: "What is the first name of the employee you want to add?"
             },
             {
-                name: 'newSalary',
                 type: 'input',
-                message: 'Enter the salary for the new Title:'
+                name: 'lastname',
+                message: "What is the last name of the employee you want to add?"
             },
             {
-                name: 'dept',
-                type: 'list',
-                choices: function () {
-                    let choiceArray = results[1].map(choice => choice.department_name);
-                    return choiceArray;
-                },
-                message: 'Select the Department for this new Title:'
-            }
-        ]).then((answer) => {
+                type: 'input',
+                name: 'roleid',
+                message: 'Please enter the role id of the employee you want to add'
+            },
+            {
+                type: 'input',
+                name: 'managername',
+                message: 'Please enter the manager name of the employee you want to add'
+            } 
+        ]).then(function(res) {
             db.query(
-                `INSERT INTO role(title, salary, department_id) 
-                VALUES
-                ("${answer.newTitle}", "${answer.newSalary}", 
-                (SELECT id FROM department WHERE department_name = "${answer.dept}"));`
+                "INSERT INTO employee SET ?",
+                {
+                  first_name: res.firstname,
+                  last_name: res.lastname,
+                  role_id: res.role,
+                  manager_id: res.managername
+            
+                },
+                function(err) {
+                    if (err) throw err
+                    console.table(res);
+                    firstPrompt();
+                }
             )
-            firstPrompt();
+    
+        });
+};
 
-        })
-    })
 
-}
+          
+
+      
 
 
 firstPrompt();
