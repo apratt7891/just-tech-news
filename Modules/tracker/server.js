@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer')
 const cTable = require('console.table');
+const roleQuery = 'SELECT * from role; SELECT CONCAT (e.first_name," ",e.last_name) AS full_name FROM employee e';
 
 
 // Connect to database
@@ -20,12 +21,12 @@ const db = mysql.createConnection(
     return inquirer
         .prompt(
             {
-                type: "list",
-                name: "options",
-                message: "Choose an option?",
+                type: 'list',
+                name: 'options',
+                message: 'Choose an option?',
                 choices: [
 
-                "View all departments", 
+                'View all departments', 
                 'View all roles',
                 'View all employees',
                 'Add department',
@@ -39,7 +40,7 @@ const db = mysql.createConnection(
             .then(function({options}) {
                 switch(options) {
 
-                    case "View all departments":
+                    case 'View all departments':
                     viewDepartments()
                     break;
 
@@ -51,7 +52,7 @@ const db = mysql.createConnection(
                     viewEmployees()
                     break;
 
-                    case 'Add Department':
+                    case 'Add department':
                     addDepartment()
                     break;
                     
@@ -120,24 +121,68 @@ function viewEmployees() {
 function addDepartment() {
 
 
-    inquirer.prompt([
+    return inquirer
+    .prompt([
         {
-            type: "input",
-            message: "What is the name of the department you want to add?",
-            name: "deptName"
+            type: 'input',
+            name: "addDepartment",
+            message: "What is the name of the department you want to add?"
         }
     ])
     .then((answer) => {
         let sql = 'INSERT INTO department (name) VALUES (?)';
         
-            db.query(sql, answer.deptName , (err, res) => {
+            db.query(sql, answer.addDepartment, (err, res) => {
             if (err) throw err;
             console.log('');
+
             firstPrompt()
     });
     });
 };
 
+
+const addRole = () => {
+    const addRoleQuery = `SELECT * FROM role; SELECT * FROM department`
+    db.query(addRoleQuery, (err, results) => {
+        if (err) throw err;
+
+        console.log('');
+        console.table(chalk.yellow('List of current Roles:'), results[0]);
+
+        inquirer.prompt([
+            {
+                name: 'newTitle',
+                type: 'input',
+                message: 'Enter the new Title:'
+            },
+            {
+                name: 'newSalary',
+                type: 'input',
+                message: 'Enter the salary for the new Title:'
+            },
+            {
+                name: 'dept',
+                type: 'list',
+                choices: function () {
+                    let choiceArray = results[1].map(choice => choice.department_name);
+                    return choiceArray;
+                },
+                message: 'Select the Department for this new Title:'
+            }
+        ]).then((answer) => {
+            db.query(
+                `INSERT INTO role(title, salary, department_id) 
+                VALUES
+                ("${answer.newTitle}", "${answer.newSalary}", 
+                (SELECT id FROM department WHERE department_name = "${answer.dept}"));`
+            )
+            firstPrompt();
+
+        })
+    })
+
+}
 
 
 firstPrompt();
