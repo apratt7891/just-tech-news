@@ -51,6 +51,11 @@ const db = mysql.createConnection(
                     viewEmployees()
                     break;
 
+                    case 'Add Department':
+                    addDepartment()
+                    break;
+                    
+                    
                     case 'Add role':
                     addRole()
                     break;
@@ -111,5 +116,28 @@ function viewEmployees() {
     firstPrompt();
 })
 };
+
+function addDepartment() {
+
+
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What is the name of the department you want to add?",
+            name: "deptName"
+        }
+    ])
+    .then((answer) => {
+        let sql = 'INSERT INTO department (name) VALUES (?)';
+        
+            db.query(sql, answer.deptName , (err, res) => {
+            if (err) throw err;
+            console.log('');
+            firstPrompt()
+    });
+    });
+};
+
+
 
 firstPrompt();
